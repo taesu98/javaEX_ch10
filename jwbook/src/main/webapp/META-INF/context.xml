@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Context path="/jwbook">
+	<Resource
+		name="jdbc/jwbookdb"
+		type="javax.sql.DataSource"
+		driverClassName="org.h2.Driver"
+		url="jdbc:h2:tcp://localhost/C:/JAVA/jwbookdb"
+		auth="Container"
+		username="jwbook"
+		password="1234"
+		maxTotal="20"
+		maxIdle="10"
+		maxWaitMillis="10000"
+	/>
+</Context>
