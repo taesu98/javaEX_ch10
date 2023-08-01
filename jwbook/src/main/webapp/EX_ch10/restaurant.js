@@ -27,10 +27,10 @@ function menuClick(event) {
     let td = null;
     let input = null;
     td = $('<td>');
-    td.innerText(menu.data().menuName);
+    td.innerText(menu[0].getAttribute("data-menu-name"));
     td.appendTo(tr);
     td = $('<td>');
-    td.innerText(menu.data().menuPrice);
+    td.innerText(menu[0].getAttribute("data-menu-price"));
     td.appendTo(tr);
     td = $('<td>');
     input = $('<input>', {type: 'hidden', class: 'menu_id', value: menu.data().menuId});

@@ -1,6 +1,7 @@
 package EX_ch10;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -9,7 +10,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
+
+import EX_ch10.bills;
 
 /**
  * Servlet implementation class rastaurantServlet
@@ -21,6 +25,8 @@ public class restaurantServlet extends HttpServlet {
     menusDAO menusService;
     creditCardsDAO creditService;
     cardTypesDAO cardTypeService;
+    couponsDAO couponsService;
+    billsDAO billsService;
 
     @Override
     public void init() throws ServletException {
@@ -29,6 +35,8 @@ public class restaurantServlet extends HttpServlet {
         menusService = new menusDAO();
         creditService = new creditCardsDAO();
         cardTypeService = new cardTypesDAO();
+        couponsService = new couponsDAO();
+        billsService = new billsDAO();
     }
 
     @Override
@@ -47,6 +55,13 @@ public class restaurantServlet extends HttpServlet {
             case "cardTypes":
                 view = cardTypes(request, response);
                 break;
+            case "coupons":
+                view = coupons(request, response);
+                break;
+            case "addBill":
+            	view = addBill(request, response);
+            case "Bills":
+            	view = Bills(request, response);
             default:
         	    break;
            
@@ -57,7 +72,50 @@ public class restaurantServlet extends HttpServlet {
         }
     }
     
-    private String cardTypes(HttpServletRequest request, HttpServletResponse response) {
+    private String coupons(HttpServletRequest request, HttpServletResponse response) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private String Bills(HttpServletRequest request, HttpServletResponse response) {
+    	List<menus> menusList = menusService.getMenusList();       
+        List<creditCards> creditCardList = creditService.getCreditCardsList();
+        List<cardTypes> cardTypeList = cardTypeService.getCardTypesList();
+        List<coupons> couponList = couponsService.getCouponList();
+        
+        request.setAttribute("menusList", menusList);
+        request.setAttribute("creditCardList", creditCardList);
+        request.setAttribute("cardTypeList", cardTypeList);
+        request.setAttribute("couponList", couponList);
+        
+		return "bills.jsp";
+	}
+
+	private String addBill(HttpServletRequest request, HttpServletResponse response) {
+		List<menus> menusList = menusService.getMenusList();       
+        List<creditCards> creditCardList = creditService.getCreditCardsList();
+        List<cardTypes> cardTypeList = cardTypeService.getCardTypesList();
+        List<coupons> couponList = couponsService.getCouponList();
+        List<bills> billsList = billsService.getBillsList();
+        
+        try {
+            bills bills = new bills();
+            BeanUtils.populate(bills, request.getParameterMap());
+            billsService.add(bills);
+            
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            System.out.println(e.getMessage());
+        }
+        request.setAttribute("menusList", menusList);
+        request.setAttribute("creditCardList", creditCardList);
+        request.setAttribute("cardTypeList", cardTypeList);
+        request.setAttribute("couponList", couponList);
+        request.setAttribute("billsList", billsList);
+        
+		return "bills.jsp";
+	}
+
+	private String cardTypes(HttpServletRequest request, HttpServletResponse response) {
     	List<cardTypes> cardTypeList = cardTypeService.getCardTypesList();
 
         request.setAttribute("cardTypeList", cardTypeList);
@@ -77,10 +135,12 @@ public class restaurantServlet extends HttpServlet {
     	List<menus> menusList = menusService.getMenusList();       
         List<creditCards> creditCardList = creditService.getCreditCardsList();
         List<cardTypes> cardTypeList = cardTypeService.getCardTypesList();
+        List<coupons> couponList = couponsService.getCouponList();
         
         request.setAttribute("menusList", menusList);
         request.setAttribute("creditCardList", creditCardList);
         request.setAttribute("cardTypeList", cardTypeList);
+        request.setAttribute("couponList", couponList);
        
         return "restaurant.jsp";
     }

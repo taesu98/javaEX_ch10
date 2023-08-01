@@ -16,12 +16,13 @@
         <link rel="stylesheet" href="https://cdn.korzh.com/metroui/v4.5.1/css/metro-all.min.css" />
         <style></style>
     </head>
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
 
     <body>
         <div data-role="appbar">
             <ul class="app-bar-menu">
-                <li><a href="/restaurant?action=restaurant">결제</a></li>
-                <li><a href="/restaurant?action=bills">결산</a></li>
+                <li><a href="<c:url value="restaurant?action=menus"/>">결제</a></li>
+                <li><a href="<c:url value="restaurant?action=Bills"/>">결산</a></li>
             </ul>
         </div>
 
@@ -32,14 +33,14 @@
         <div class="container">
             <h6>메뉴</h6>
             <c:forEach var="menus" items="${menusList}">
-                <button class="button menu" id="${menus.id}" name="${menus.menuName}" price="${menus.price}">${menus.menuName}
+                <button class="button menu" data-menu-id="${menus.id}" data-menu-name="${menus.menuName}" data-menu-price="${menus.price}">${menus.menuName}
                 </button>
             </c:forEach>
         </div>
         <br />
         <div class="container">
             <h6>선택한 메뉴</h6>
-            <form action="/EX_ch10/restaurant?action=addBill" method="post" id="form_bill">
+            <form action="<c:url value="restaurant?action=addBill"/>" method="post" id="form_bill">
                 <input type="hidden" name="cardId" value="-1" id="card_id" />
                 <input type="hidden" name="couponId" value="-1" id="coupon_id" />
                 <table class="table" data-role="table" data-show-search="false" data-show-rows-steps="false" data-show-table-info="false">
@@ -66,44 +67,37 @@
             <h6>제휴/할인카드/쿠폰</h6>
             <select data-role="select" data-filter="false" id="select_credit">
                 <option value="-1">신용카드 선택하세요.</option>
-                <c:forEach var="creditCards" items="${creditCardList}">
-                <c:if test="${creditCards.cardType eq cardTypes[0].cardType}"></c:if>
-                	<option value="${creditCards.discount}">${creditCards.cardName}</option>
+                <c:forEach var="creditCards" varStatus="i" begin="1" end="11" items="${creditCardList}">                
+                	<option value="${creditCards.id}">${creditCards.cardName}</option>
             	</c:forEach>
                 
             </select>
             <select data-role="select" data-filter="false" id="select_telecom">
                 <option value="-1">통신사 선택하세요.</option>
-                	<c:forEach var="creditCards" items="${creditCardList}">
-                <c:if test="${creditCards.cardType eq cardTypes[1].cardType}"></c:if>
-                	<option value="${creditCards.discount}">${creditCards.cardName}</option>
+                	<c:forEach var="creditCards" varStatus="i" begin="12" end="15" items="${creditCardList}">                
+                	<option value="${creditCards.id}">${creditCards.cardName}</option>
             	</c:forEach>
                 
             </select>
             <select data-role="select" data-filter="false" id="select_point">
                 <option value="-1">포인트결제 선택하세요.</option>
-         
-                    <c:forEach var="creditCards" items="${creditCardList}">
-                <c:if test="${creditCards.cardType eq cardTypes[2].cardType}"></c:if>
-                	<option value="${creditCards.discount}">${creditCards.cardName}</option>
+         		<c:forEach var="creditCards" varStatus="i" begin="17" end="22" items="${creditCardList}">                
+                	<option value="${creditCards.id}">${creditCards.cardName}</option>
             	</c:forEach>
                 
             </select>
             <select data-role="select" data-filter="false" id="select_okcashbag">
-                <c:forEach var="creditCards" items="${creditCardList}">
-                <c:if test="${creditCards.cardType eq cardTypes[3].cardType}"></c:if>
-                	<option value="${creditCards.discount}">${creditCards.cardName}</option>
+            	<option value="-1">OK캐시백 선택하세요.</option>
+                <c:forEach var="creditCards" varStatus="i" begin="16" end="16" items="${creditCardList}">                
+                	<option value="${creditCards.id}">${creditCards.cardName}</option>
             	</c:forEach>
                 
             </select>
             <select data-role="select" data-filter="false" id="select_coupon">
-                <option value="-1">할인쿠폰 선택하세요.</option>
-                
-                    <c:forEach var="creditCards" items="${creditCardList}">
-                <c:if test="${creditCards.cardType eq cardTypes[4].cardType}"></c:if>
-                	<option value="${creditCards.discount}">${creditCards.cardName}</option>
+                <option value="-1">할인쿠폰 선택하세요.</option>               
+                    <c:forEach var="coupons" items="${couponList}">
+                	<option value="${coupons.id}">${coupons.ctitle}</option>                
             	</c:forEach>
-                
             </select>
         </div>
         <br />

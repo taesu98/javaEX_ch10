@@ -44,7 +44,7 @@ public class OrderingDAO {
 		
 		try {
 			pstmt = conn.prepareStatement
-					("select o.custid,c.name,b.bookid, b.bookname,saleprice, o.orderdate from orders o join book b on o.bookid = b.bookid join customer c on o.custid = c.custid;");
+					("select o.custid,c.name,b.bookid, b.bookname, saleprice, o.orderdate from orders o join book b on o.bookid = b.bookid join customer c on o.custid = c.custid;");
 			ResultSet rs = pstmt.executeQuery();
 			while(rs.next()) {
 				Ordering o = new Ordering();
