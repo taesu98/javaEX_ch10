@@ -39,26 +39,25 @@ public class ordersDAO {
 		List<orders> ordersList = new ArrayList<>();
 		
 		try {
-			pstmt = conn.prepareStatement("select b.id, b.sellingprice, b.price, b.orderDate, c.cardName, cc.ctitle , m.menuName, o.menuquantity from bills b join orders o on b.id = o.bilId join menus m on o.menuId = m.id join creditcards  c on b.card  = c.id join coupons cc on cc.id = b.coupon ;");
+			pstmt = conn.prepareStatement("select o.bilId, o.menuId, o.menuQuantity from orders o join bills b on b.id = o.bilId join menus m on o.menuId = m.id ;");
 			ResultSet rs = pstmt.executeQuery();
 			while(rs.next()) {
 				bills b = new bills();
 				b.setId(rs.getInt("id"));
 				b.setSellingprice(rs.getInt("sellingPrice"));
 				b.setPrice(rs.getInt("price"));
-				b.setOrderDate(rs.getDate(0));
-				b.setCard(rs.getString("card"));
-				b.setCoupon(rs.getString("coupon"));
-				coupons cc = new coupons();
-				cc.setCtitle(rs.getString("cTitle"));
-				creditCards cd = new creditCards();
-				cd.setCardName(rs.getString("cardName"));
+				b.setOrderDate(rs.getDate("orderDate"));
+				b.setCardId(rs.getInt("cardId"));
+				b.setCouponId(rs.getInt("couponId"));
 				menus m = new menus();
+				m.setId(rs.getInt("id"));
 				m.setMenuName(rs.getString("menuName"));
 				orders o = new orders();
-				o.setMenuquantity(rs.getInt("menuquantity"));
-				o.setCoupons(cc);
-				o.setCreditCards(cd);
+				o.setId(rs.getInt("id"));
+				o.setBilId(rs.getInt("bilId"));
+				o.setMenuId(rs.getInt("menuId"));
+				o.setMenuQuantity(rs.getInt("menuQuantity"));	
+				o.setBills(b);
 				o.setMenus(m);
 				
 				ordersList.add(o);
@@ -69,17 +68,18 @@ public class ordersDAO {
 		return ordersList;
 	}
 	
-	public void add(orders o) {
-		open();
-		String sql = 
-				"INSERT INTO orders(menuquantity) values(?)";
-		try {
-			pstmt = conn.prepareStatement(sql);
-
-			pstmt.setInt(1, o.getMenuquantity());
-			
-			pstmt.executeUpdate();
-		} catch(Exception e) { e.printStackTrace();}
-			finally {close();}
-	}
+//	public void add(orders o) {
+//		open();
+//		String sql = 
+//				"INSERT INTO orders(bilId, menuId, menuquantity) values(?,?,?)";
+//		try {
+//			pstmt = conn.prepareStatement(sql);
+//			pstmt.setInt(1, o.getBilId());
+//			pstmt.setInt(2, o.getMenuId());
+//			pstmt.setInt(3, o.getMenuquantity());
+//			
+//			pstmt.executeUpdate();
+//		} catch(Exception e) { e.printStackTrace();}
+//			finally {close();}
+//	}
 }

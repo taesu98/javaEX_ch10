@@ -3,6 +3,7 @@ package EX_ch10;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import EX_ch09.Customer;
 import EX_ch10.bills;
 
 /**
@@ -27,6 +29,7 @@ public class restaurantServlet extends HttpServlet {
     cardTypesDAO cardTypeService;
     couponsDAO couponsService;
     billsDAO billsService;
+    ordersDAO ordersService;
 
     @Override
     public void init() throws ServletException {
@@ -37,6 +40,7 @@ public class restaurantServlet extends HttpServlet {
         cardTypeService = new cardTypesDAO();
         couponsService = new couponsDAO();
         billsService = new billsDAO();
+        ordersService = new ordersDAO();
     }
 
     @Override
@@ -48,20 +52,13 @@ public class restaurantServlet extends HttpServlet {
         switch (action) {
             case "menus":
                 view = menus(request, response);
-                break;
-            case "creditCards":
-                view = creditCards(request, response);
-                break;
-            case "cardTypes":
-                view = cardTypes(request, response);
-                break;
-            case "coupons":
-                view = coupons(request, response);
-                break;
+                break;                       
             case "addBill":
             	view = addBill(request, response);
+            	break;
             case "Bills":
             	view = Bills(request, response);
+          
             default:
         	    break;
            
@@ -71,11 +68,27 @@ public class restaurantServlet extends HttpServlet {
             getServletContext().getRequestDispatcher("/EX_ch10/" + view).forward(request, response);
         }
     }
+//    private String setMenus(HttpServletRequest request, HttpServletResponse response) throws IOException {
+//        try {
+//        	int id = Integer.parseInt(StringUtils.defaultIfEmpty(request.getParameter("id"),"-1"));
+//            menus menus = new menus();
+//            BeanUtils.populate(menus, request.getParameterMap());
+//            menus.setId(id);
+//            
+//            if (menus.getId() == -1) {
+//            	billsService.addBils(menus);
+//            } else {
+////                customerService.set(customer);
+//            }
+//            response.sendRedirect("madangControl?action=customers");
+//            
+//        } catch (IllegalAccessException | InvocationTargetException e) {
+//            System.out.println(e.getMessage());
+//        }
+//        return "customers.jsp";
+//    }
     
-    private String coupons(HttpServletRequest request, HttpServletResponse response) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    
 
 	private String Bills(HttpServletRequest request, HttpServletResponse response) {
     	List<menus> menusList = menusService.getMenusList();       
@@ -92,44 +105,43 @@ public class restaurantServlet extends HttpServlet {
 	}
 
 	private String addBill(HttpServletRequest request, HttpServletResponse response) {
-		List<menus> menusList = menusService.getMenusList();       
-        List<creditCards> creditCardList = creditService.getCreditCardsList();
-        List<cardTypes> cardTypeList = cardTypeService.getCardTypesList();
-        List<coupons> couponList = couponsService.getCouponList();
+//		List<menus> menusList = menusService.getMenusList();       
+//        List<creditCards> creditCardList = creditService.getCreditCardsList();
+//        List<cardTypes> cardTypeList = cardTypeService.getCardTypesList();
+//        List<coupons> couponList = couponsService.getCouponList();
+//		Map<String, String[]> map = request.getParameterMap();
+		
+		
         List<bills> billsList = billsService.getBillsList();
-        
+        List<orders> ordersList = ordersService.getOrdersList();
+        Integer billId = null;
         try {
             bills bills = new bills();
             BeanUtils.populate(bills, request.getParameterMap());
-            billsService.add(bills);
+            billId = billsService.addBils(bills);
             
         } catch (IllegalAccessException | InvocationTargetException e) {
             System.out.println(e.getMessage());
         }
-        request.setAttribute("menusList", menusList);
-        request.setAttribute("creditCardList", creditCardList);
-        request.setAttribute("cardTypeList", cardTypeList);
-        request.setAttribute("couponList", couponList);
+        try {
+            orders orders = new orders();
+            BeanUtils.populate(orders, request.getParameterMap());
+            billsService.addOrders(orders, billId);
+            
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            System.out.println(e.getMessage());
+        }
+        
+//        request.setAttribute("menusList", menusList);
+//        request.setAttribute("creditCardList", creditCardList);
+//        request.setAttribute("cardTypeList", cardTypeList);
+//        request.setAttribute("couponList", couponList);
         request.setAttribute("billsList", billsList);
+        request.setAttribute("ordersList", ordersList);
         
 		return "bills.jsp";
 	}
 
-	private String cardTypes(HttpServletRequest request, HttpServletResponse response) {
-    	List<cardTypes> cardTypeList = cardTypeService.getCardTypesList();
-
-        request.setAttribute("cardTypeList", cardTypeList);
-        
-        return "restaurant.jsp";
-	}
-
-	private String creditCards(HttpServletRequest request, HttpServletResponse response) {
-    	List<creditCards> creditCardList = creditService.getCreditCardsList();
-
-        request.setAttribute("creditCardList", creditCardList);
-        
-        return "restaurant.jsp";
-	}
 
 	private String menus(HttpServletRequest request, HttpServletResponse response) {
     	List<menus> menusList = menusService.getMenusList();       

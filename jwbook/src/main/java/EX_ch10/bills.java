@@ -1,22 +1,38 @@
 package EX_ch10;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class bills {
 	private int id;
 	private int sellingprice;
 	private int price;
 	private Date orderDate;
-	private String card;
-	private String coupon;
+	private int cardId;
+	private int couponId;
 	private creditCards creditCards;
 	private coupons coupons;
 	private menus menus;
 	private orders orders;
+//	private orders[] ordersList;
 	
-	public orders getOrders() {
-		return orders;
+	public bills() {
+//		ordersList = new orders[0];
 	}
+	
+//	public orders getOrders() {
+//		return orders;
+//	}
+//
+//	public orders[] getOrdersList() {
+//		return ordersList;
+//	}
+//
+//	public void setOrdersList(orders[] ordersList) {
+//		this.ordersList = ordersList;
+//	}
+
 	public void setOrders(orders orders) {
 		this.orders = orders;
 	}
@@ -63,22 +79,17 @@ public class bills {
 	public void setOrderDate(Date orderDate) {
 		this.orderDate = orderDate;
 	}
-	public String getCard() {
-		return card;
+	public int getCardId() {
+		return cardId;
 	}
-	public void setCard(String card) {
-		this.card = card;
+	public void setCardId(int cardId) {
+		this.cardId = cardId;
 	}
-	public String getCoupon() {
-		return coupon;
+	public int getCouponId() {
+		return couponId;
 	}
-	public void setCoupon(String coupon) {
-		this.coupon = coupon;
-	}
-	
-	
-	
-	
-	
+	public void setCouponId(int couponId) {
+		this.couponId = couponId;
+	}	
 	
 }

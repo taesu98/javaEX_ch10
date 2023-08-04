@@ -33,7 +33,7 @@ function menuClick(event) {
     td.innerText(menu[0].getAttribute("data-menu-price"));
     td.appendTo(tr);
     td = $('<td>');
-    input = $('<input>', {type: 'hidden', class: 'menu_id', value: menu.data().menuId});
+    input = $('<input>', {type: 'hidden', class: 'menu_id' ,value: menu.data().menuId});
     input.appendTo(td);
     input = $('<input>', {type: 'number', class: 'menu_quantity', value: 1, step: 1, min: 1});
     input.appendTo(td);
@@ -215,9 +215,9 @@ function sumPrice() {
 }
 
 function addIndexedName(inputs, indexedName, name) {
-   // for (let i = 0; i < inputs.length; i++) {
-    //    inputs[i].name = `${indexedName}[${i}].${name}`;
-    //}
+    for (let i = 0; i < inputs.length; i++) {
+        inputs[i].name = `${indexedName}[${i}].${name}`;
+    }
 }
 
 function settleClick(event) {
@@ -228,7 +228,7 @@ function settleClick(event) {
      inputs[i].name = `lineItems[${i}].menuQuantity`;
      }
      */
-   // addIndexedName(inputs, 'ordersList', 'menuQuantity');
+    addIndexedName(inputs, 'lineItems', 'menuQty');
 
     inputs = $('input.menu_id');
     /*
@@ -236,7 +236,7 @@ function settleClick(event) {
      inputs[i].name = `lineItems[${i}].menuId`;
      }
      */
-   // addIndexedName(inputs, 'ordersList', 'menuId');
+    addIndexedName(inputs, 'lineItems', 'menuId');
     $('#form_bill')[0].submit();
 }
 

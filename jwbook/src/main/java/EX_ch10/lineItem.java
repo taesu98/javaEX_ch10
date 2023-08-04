@@ -1,9 +1,6 @@
 package EX_ch10;
 
-import java.util.HashMap;
-import java.util.Map;
-
-public class orders {
+public class lineItem {
 	private int id;
 	private int bilId;
 	private int menuId;
@@ -63,6 +60,6 @@ public class orders {
 		this.menuQuantity = menuQuantity;
 	}
 	
-
+	
 
 }
